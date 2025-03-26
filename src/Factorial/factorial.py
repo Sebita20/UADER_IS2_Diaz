@@ -21,28 +21,31 @@ def factorial(num):
         return fact 
 
 if len(sys.argv) == 1:
-    print("Debe informar un número o un rango en formato inicio-fin (ej. 4-8)!")
+    print("Debe informar un número o un rango en formato inicio-fin (ej. 4-8, -10, 5-).")
     sys.exit()
 
 # Obtener el argumento ingresado
 entrada = sys.argv[1]
 
-# Verificar si es un rango (ejemplo: "4-8")
-if '-' in entrada:
-    try:
-        inicio, fin = map(int, entrada.split('-'))
+try:
+    if '-' in entrada:
+        if entrada.startswith('-'):  # Caso "-10" → de 1 a 10
+            inicio, fin = 1, int(entrada[1:])
+        elif entrada.endswith('-'):  # Caso "5-" → de 5 a 60
+            inicio, fin = int(entrada[:-1]), 60
+        else:  # Caso "4-8" → de 4 a 8
+            inicio, fin = map(int, entrada.split('-'))
+        
         if inicio > fin:
             print("El primer número debe ser menor o igual al segundo en el rango.")
             sys.exit()
-    except ValueError:
-        print("Formato incorrecto. Use números enteros en formato inicio-fin (ej. 4-8).")
-        sys.exit()
-else:
-    try:
+    
+    else:  # Caso único número "5"
         inicio = fin = int(entrada)
-    except ValueError:
-        print("Debe ingresar un número válido.")
-        sys.exit()
+
+except ValueError:
+    print("Formato incorrecto. Use números enteros en formato inicio-fin (ej. 4-8, -10, 5-).")
+    sys.exit()
 
 # Calcular y mostrar factoriales en el rango
 for num in range(inicio, fin + 1):
